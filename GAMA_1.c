@@ -63,10 +63,10 @@ void leDados(tam) {
 	printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 }
 
+/*
 void a(tam) {
 	int a, b, dia, mes, ano, cod, i, j, c, d, e, f, g, h, k, l;
 	long long int diaMin, mesMin, anoMin, auxDia, auxMes, auxAno;
-	/*
 	system("cls");
 	do {
 		printf("Insira a data de fundação que deseja procurar no formado DD MM AAAA\n");
@@ -120,22 +120,23 @@ void a(tam) {
 			}
 		}
 	}
-	mostrarDados(tam); */
+	mostrarDados(tam);
 }
+*/
 
-mostrarDados(tam) {
-	int a;
-	for (a=0;a<tam;a++) { 
-		printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
-		printf("Nome do cliente: %s", clientes[a].nome); printf("	"); printf ("Código de %s: %d\n", clientes[a].nome, clientes[a].codigo);
-		printf("Faturamento de %s: R$%d\n", clientes[a].nome, clientes[a].fat);
-		printf("Data de fundação de %s: %d/%d/%d", clientes[a].nome, clientes[a].fund.dia, clientes[a].fund.mes, clientes[a].fund.ano);
-		printf("	"); printf("Data de alteração de %s: %d/%d/%d\n", clientes[a].nome, clientes[a].alt.dia, clientes[a].alt.mes, clientes[a].alt.ano);
+void a(tam) {
+	system("cls");
+	int a, b, auxDiaalt, auxMesalt, auxAnoalt, auxDiafund, auxMesfund, auxAnofund;
+	char copiaNome[20], copiaDoc[20];
+	long long int auxCodigo, auxFat;
+	for (a=0;a<(tam-1);a++) {
+		for (b=a+1;b<tam;b++) {
+			
+		}
 	}
-	printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n"); 
 }
 
-void ordemCodigo(tam) {
+void ordemTam(tam) {
 	/*Crie uma função que receba uma lista de clientes e retorne os 10 maiores
 	faturamentos.*/
 	system("cls");
@@ -194,7 +195,7 @@ void ordemCodigo(tam) {
 		}
 		printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 		printf("Nome do cliente: %s", clientes[a].nome); printf("	"); printf ("Código de %s: %d\n", clientes[a].nome, clientes[a].codigo);
-		printf("Faturamento de %s: R$%d", clientes[a].nome, clientes[a].fat); printf ("	"); printf ("Documento de %s: %s\n", clientes[a].nome, clientes[a].doc);
+		printf("Faturamento de %s: R$%d", clientes[a].nome, clientes[a].fat); printf("	"); printf ("Documento de %s: %s\n", clientes[a].nome, clientes[a].doc);
 		if (clientes[a].fund.dia < 10) {
 			printf("Data de fundação de %s: 0%d/%d/%d	", clientes[a].nome, clientes[a].fund.dia, clientes[a].fund.mes, clientes[a].fund.ano);
 		}
@@ -240,10 +241,10 @@ void menu() {
 		scanf("%d", &op);
 	} while (op<1 || op>2);
 	if (op==1) {
-		printf("OP 1\n");
+		a(tam);
 	}
 	if (op==2) {
-		ordemCodigo(tam);
+		ordemTam(tam);
 	}
 }
 
