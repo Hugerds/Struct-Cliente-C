@@ -17,7 +17,7 @@ typedef struct {
 } data;
 
 struct clientesEmp {
-	int codigo;
+	char codigo[20];
 	char nome[20];
 	char doc[20];
 	int fat;
@@ -35,7 +35,7 @@ void leDados(int tam) {
 		gets(clientes[a].nome);
 		printf ("Insira o código de cliente de %s\n", clientes[a].nome);
 		fflush(stdin);
-		scanf("%d", &clientes[a].codigo);
+		gets(clientes[a].codigo);
 		fflush(stdout);
 		printf("Insira o documento de %s\n", clientes[a].nome);
 		fflush(stdin);
@@ -67,7 +67,7 @@ void leDados(int tam) {
 
 void mostrarDados(int tam, int a) {
 	printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
-	printf("Nome do cliente: %s     ", clientes[a].nome);printf ("Código de %s: %d\n", clientes[a].nome, clientes[a].codigo);
+	printf("Nome do cliente: %s     ", clientes[a].nome);printf ("Código de %s: %s\n", clientes[a].nome, clientes[a].codigo);
 	printf("Faturamento de %s: R$%d     ", clientes[a].nome, clientes[a].fat);printf ("Documento de %s: %s\n", clientes[a].nome, clientes[a].doc);
 	if (clientes[a].fund.dia < 10 && clientes[a].fund.mes < 10) {
 		printf("Data de fundação de %s: 0%d/0%d/%d", clientes[a].nome, clientes[a].fund.dia, clientes[a].fund.mes, clientes[a].fund.ano);
@@ -97,8 +97,8 @@ void mostrarDados(int tam, int a) {
 
 void ordenarData(int tam, int a, int b) {
 	int auxDiaalt, auxMesalt, auxAnoalt, auxDiafund, auxMesfund, auxAnofund, dia, mes, ano, fat;
-	char copiaNome[20], copiaDoc[20];
-	long long int auxCodigo, auxFat;
+	char copiaNome[20], copiaDoc[20], copiaCod[20];
+	long long int auxFat;
 	// Ano Data Alt
 	auxAnoalt = clientes[a].alt.ano;
 	clientes[a].alt.ano = clientes[b].alt.ano;
@@ -108,15 +108,15 @@ void ordenarData(int tam, int a, int b) {
 	clientes[a].fat = clientes[b].fat;
 	clientes[b].fat = auxFat;
 	// Código
-	auxCodigo = clientes[a].codigo;
-	clientes[a].codigo = clientes[b].codigo;
-	clientes[b].codigo = auxCodigo;
+	strcpy(copiaCod, clientes[a].codigo);
+	strcpy(clientes[a].codigo, clientes[b].codigo);
+	strcpy(clientes[b].codigo, copiaCod);
 	// Nome
 	strcpy (copiaNome, clientes[a].nome);
 	strcpy(clientes[a].nome, clientes[b].nome);
 	strcpy(clientes[b].nome, copiaNome);
 	// Documento
-	strcpy (copiaDoc, clientes[a].doc);
+	strcpy(copiaDoc, clientes[a].doc);
 	strcpy(clientes[a].doc, clientes[b].doc);
 	strcpy(clientes[b].doc, copiaDoc);
 	// Dia Data Alt
@@ -145,9 +145,7 @@ void ordemTam(int tam) {
 	/*Crie uma função que receba uma lista de clientes e retorne os 10 maiores
 	faturamentos.*/
 	system("cls");
-	int a, b, auxDiaalt, auxMesalt, auxAnoalt, auxDiafund, auxMesfund, auxAnofund;
-	char copiaNome[20], copiaDoc[20];
-	long long int auxCodigo, auxFat;
+	int a, b;
 	for (a=0;a<(tam-1);a++) {
 		for(b=a+1;b<tam;b++) {
 			if (clientes[a].fat<clientes[b].fat) {
@@ -163,7 +161,6 @@ void ordemTam(int tam) {
 	}
 	printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 	system("pause");
-	reprocessar();
 }
 
 void naoEncontrado(int dia, int mes, int ano, int fat, int tam) {
@@ -180,43 +177,28 @@ void naoEncontrado(int dia, int mes, int ano, int fat, int tam) {
 	else {
 		printf("Não encontramos nenhum cliente a partir da data %d/%d/%d e com piso de faturamento a partir de %d\n", dia, mes, ano, fat);
 	}
-	system("pause");
-	reprocessar(tam);
 }
 
 void a(int tam) {
-	int a, b, auxDiaalt, auxMesalt, auxAnoalt, auxDiafund, auxMesfund, auxAnofund, c, d, e, dia, mes, ano, fat;
-	char copiaNome[20], copiaDoc[20];
-	long long int auxCodigo, auxFat;
+	int a, b, dia, mes, ano, fat;
+	system("cls");
 	do {
 		printf("Insira a data de fundação que deseja procurar no formato DD MM AAAA\n");
 		scanf ("%d %d %d", &dia, &mes, &ano);
 	} while ((dia <=0 || dia>31) || (mes <= 0 || mes > 12) || (ano < 1950 || ano >2020));
 	printf("Agora insira o piso de faturamento que deseja buscar\n"); scanf ("%d", &fat);
-	for (c=0;c<(tam+1);c++) {
-		for (d=0;d<tam;d++) {
-			for (a=0;a<(tam-1);a++) {
-				for (b=a+1;b<tam;b++) {
-					if (clientes[a].fund.ano<clientes[b].fund.ano) {
-						ordenarData(tam, a, b);
-					}
-				}
+	for (a=0;a<(tam-1);a++) {
+		for (b=a+1;b<tam;b++) {
+			if(clientes[a].fund.ano<clientes[b].fund.ano) {
+				ordenarData(tam, a, b);
 			}
-			for(a=0;a<(tam-1);a++) {
-				for(b=a+1;b<tam;b++) {
-					if(clientes[a].fund.ano==clientes[b].fund.ano) {
-						if (clientes[a].fund.mes<clientes[b].fund.mes) {
-						ordenarData(tam, a, b);
-						}
-					}
+			else if(clientes[a].fund.ano==clientes[b].fund.ano) {
+				if(clientes[a].fund.mes<clientes[b].fund.mes) {
+					ordenarData(tam, a, b);
 				}
-			}
-			for(a=0;a<(tam-1);a++) {
-				for(b=a+1;b<tam;b++) {
-					if(clientes[a].fund.mes==clientes[b].fund.mes) {
-						if (clientes[a].fund.dia<clientes[b].fund.dia) {
-		        		ordenarData(tam, a, b);
-						}
+				else if(clientes[a].fund.mes==clientes[b].fund.mes) {
+					if(clientes[a].fund.dia<clientes[b].fund.dia) {
+						ordenarData(tam, a, b);
 					}
 				}
 			}
@@ -224,68 +206,69 @@ void a(int tam) {
 	}
 	system("cls");
 	for(a=0;a<tam;a++) {
-		if(clientes[a].fund.ano<ano) {
-			
+		if(clientes[a].fund.ano>=ano) {
+			mostrarDados(tam, a);
 		}
 		else if(clientes[a].fund.ano==ano) {
-			if (clientes[a].fund.mes<mes) {
-				
-			}
-			else if(clientes[a].fund.mes==mes) {
-				if (clientes[a].fund.dia<dia) {
-					
-				}
-				else {
-					if (clientes[a].fat>=fat) {
-						mostrarDados(tam, a);
-					}
-					else {
-						naoEncontrado(dia, mes, ano, fat, tam);
-						break;
-					}
-				}
-			}
-			else {
-				if (clientes[a].fat>=fat) {
-					mostrarDados(tam, a);
-				}
-				else {
-					naoEncontrado(dia, mes, ano, fat, tam);
-					break;
-				}
-			}
-		}
-		else {
-			if (clientes[a].fat>=fat) {
+			if(clientes[a].fund.mes>=mes) {
 				mostrarDados(tam, a);
 			}
-			else {
-				naoEncontrado(dia, mes, ano, fat, tam);
-				break;
+			else if(clientes[a].fund.mes==mes) {
+				if(clientes[a].fund.dia>=dia) {
+					mostrarDados(tam, a);
+				}
 			}
 		}
 	}
 	printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 	system("pause");
-	reprocessar(tam);
 }
 
 void menuRep(int tam) {
-	int op;
+	int op, opRep;
+	system("cls");
 	do {
 		printf("Você deseja:\n1-Inserir a data de fundação e o valor do faturamento e retorná-los em ordem de data de faturamento\n2-Retornar os 10 maiores faturamentos entre clientes\nSua opção: ");
 		scanf("%d", &op);
 	} while (op<1 || op>2);
 	if (op==1) {
 		a(tam);
+		system("cls");
+		do {
+		printf("Você deseja reutilizar o programa com os dados inseridos ou deseja inserir outros?\n1-Reutilizar com os mesmos dados\n2-Reutilizar com novos dados\n3-Sair\nSua opção: ");
+		scanf("%d", &opRep);
+		} while(opRep<0&&opRep>3);
+		if (opRep==1) {
+			menuRep(tam);
+		}
+		if (opRep==2) {
+			main();
+		}
+		else {
+			system("exit");
+		}
 	}
 	if (op==2) {
 		ordemTam(tam);
+		system("cls");
+		do {
+		printf("Você deseja reutilizar o programa com os dados inseridos ou deseja inserir outros?\n1-Reutilizar com os mesmos dados\n2-Reutilizar com novos dados\n3-Sair\nSua opção: ");
+		scanf("%d", &opRep);
+		} while(opRep<0&&opRep>3);
+		if (opRep==1) {
+			menuRep(tam);
+		}
+		if (opRep==2) {
+			main();
+		}
+		else {
+			system("exit");
+		}
 	}
 }
 
 void menu() {
-	int tam, op;
+	int tam, op, opRep;
 	do {
 		printf("Quantos clientes você deseja cadastrar?(MAX 50)\n");
 		fflush(stdin);
@@ -302,27 +285,37 @@ void menu() {
 	} while (op<1 || op>2);
 	if (op==1) {
 		a(tam);
+		system("cls");
+		do {
+		printf("Você deseja reutilizar o programa com os dados inseridos ou deseja inserir outros?\n1-Reutilizar com os mesmos dados\n2-Reutilizar com novos dados\n3-Sair\nSua opção: ");
+		scanf("%d", &opRep);
+		} while(opRep<0&&opRep>3);
+		if (opRep==1) {
+			menuRep(tam);
+		}
+		if (opRep==2) {
+			main();
+		}
+		else {
+			system("exit");
+		}
 	}
 	if (op==2) {
 		ordemTam(tam);
-	}
-}
-
-void reprocessar(int tam) {
-	int op;
-	system("cls");
-	do {
+		system("cls");
+		do {
 		printf("Você deseja reutilizar o programa com os dados inseridos ou deseja inserir outros?\n1-Reutilizar com os mesmos dados\n2-Reutilizar com novos dados\n3-Sair\nSua opção: ");
-		scanf("%d", &op);
-	} while(op<0&&op>3);
-	if (op==1) {
-		menuRep(tam);
-	}
-	if (op==2) {
-		main();
-	}
-	else {
-		system("exit");
+		scanf("%d", &opRep);
+		} while(opRep<0&&opRep>3);
+		if (opRep==1) {
+			menuRep(tam);
+		}
+		if (opRep==2) {
+			main();
+		}
+		else {
+			system("exit");
+		}
 	}
 }
 
