@@ -4,6 +4,11 @@
 #include <locale.h>
 
 #define MAX 50
+/*Crie uma função que receba a data de fundação e o valor do faturamento,
+retorne todos os clientes ativos ordenados por data de alteração onde a data de
+fundação e o faturamento sejam maiores ou iguais aos enviados por parâmetro.
+Crie uma função que receba uma lista de clientes e retorne os 10 maiores
+faturamentos.*/
 
 typedef struct {
 	int dia;
@@ -20,13 +25,7 @@ struct clientesEmp {
 	bool ativo;
 } clientes[MAX];
 
-/*Crie uma função que receba a data de fundação e o valor do faturamento,
-retorne todos os clientes ativos ordenados por data de alteração onde a data de
-fundação e o faturamento sejam maiores ou iguais aos enviados por parâmetro.
-Crie uma função que receba uma lista de clientes e retorne os 10 maiores
-faturamentos.*/
-
-void leDados(tam) {
+void leDados(int tam) {
 	printf("%d\n", tam);
 	int a;
 	for (a=0;a<tam;a++) {
@@ -68,39 +67,125 @@ void leDados(tam) {
 
 void mostrarDados(int tam, int a) {
 	printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
-	printf("Nome do cliente: %s", clientes[a].nome); printf("	"); printf ("Código de %s: %d\n", clientes[a].nome, clientes[a].codigo);
-	printf("Faturamento de %s: R$%d", clientes[a].nome, clientes[a].fat); printf("	"); printf ("Documento de %s: %s\n", clientes[a].nome, clientes[a].doc);
-	if (clientes[a].fund.dia < 10) {
-		printf("Data de fundação de %s: 0%d/%d/%d	", clientes[a].nome, clientes[a].fund.dia, clientes[a].fund.mes, clientes[a].fund.ano);
+	printf("Nome do cliente: %s     ", clientes[a].nome);printf ("Código de %s: %d\n", clientes[a].nome, clientes[a].codigo);
+	printf("Faturamento de %s: R$%d     ", clientes[a].nome, clientes[a].fat);printf ("Documento de %s: %s\n", clientes[a].nome, clientes[a].doc);
+	if (clientes[a].fund.dia < 10 && clientes[a].fund.mes < 10) {
+		printf("Data de fundação de %s: 0%d/0%d/%d", clientes[a].nome, clientes[a].fund.dia, clientes[a].fund.mes, clientes[a].fund.ano);
+	}
+	else if (clientes[a].fund.dia < 10) {
+		printf("Data de fundação de %s: 0%d/%d/%d", clientes[a].nome, clientes[a].fund.dia, clientes[a].fund.mes, clientes[a].fund.ano);
 	}
 	else if (clientes[a].fund.mes < 10) {
-		printf("Data de fundação de %s: %d/0%d/%d	", clientes[a].nome, clientes[a].fund.dia, clientes[a].fund.mes, clientes[a].fund.ano);
-	}
-	else if (clientes[a].fund.mes < 10 && clientes[a].fund.dia < 10) {
-		printf("Data de fundação de %s: 0%d/0%d/%d	", clientes[a].nome, clientes[a].fund.dia, clientes[a].fund.mes, clientes[a].fund.ano);
+		printf("Data de fundação de %s: %d/0%d/%d", clientes[a].nome, clientes[a].fund.dia, clientes[a].fund.mes, clientes[a].fund.ano);
 	}
 	else {
-		printf("Data de fundação de %s: %d/%d/%d	", clientes[a].nome, clientes[a].fund.dia, clientes[a].fund.mes, clientes[a].fund.ano);
+		printf("Data de fundação de %s: %d/%d/%d", clientes[a].nome, clientes[a].fund.dia, clientes[a].fund.mes, clientes[a].fund.ano);
 	}
-	if (clientes[a].alt.dia < 10) {
-		printf("Data de alteração de %s: 0%d/%d/%d\n", clientes[a].nome, clientes[a].alt.dia, clientes[a].alt.mes, clientes[a].alt.ano);
+	if (clientes[a].alt.dia < 10 && clientes[a].alt.mes < 10) {
+		printf("     Data de alteração de %s: 0%d/0%d/%d\n", clientes[a].nome, clientes[a].alt.dia, clientes[a].alt.mes, clientes[a].alt.ano);
+	}
+	else if (clientes[a].alt.dia < 10) {
+		printf("     Data de alteração de %s: 0%d/%d/%d\n", clientes[a].nome, clientes[a].alt.dia, clientes[a].alt.mes, clientes[a].alt.ano);
 	}
 	else if (clientes[a].alt.mes < 10) {
-		printf("Data de alteração de %s: %d/0%d/%d\n", clientes[a].nome, clientes[a].alt.dia, clientes[a].alt.mes, clientes[a].alt.ano);
-	}
-	else if (clientes[a].alt.mes < 10 && clientes[a].alt.dia < 10) {
-		printf("Data de alteração de %s: 0%d/0%d/%d\n", clientes[a].nome, clientes[a].alt.dia, clientes[a].alt.mes, clientes[a].alt.ano);
+		printf("     Data de alteração de %s: %d/0%d/%d\n", clientes[a].nome, clientes[a].alt.dia, clientes[a].alt.mes, clientes[a].alt.ano);
 	}
 	else {
-		printf("Data de alteração de %s: %d/%d/%d\n", clientes[a].nome, clientes[a].alt.dia, clientes[a].alt.mes, clientes[a].alt.ano);
+		printf("     Data de alteração de %s: %d/%d/%d\n", clientes[a].nome, clientes[a].alt.dia, clientes[a].alt.mes, clientes[a].alt.ano);
 	}
 }
 
-void a(tam) {
-	/*Crie uma função que receba a data de fundação e o valor do faturamento,
-	retorne todos os clientes ativos ordenados por data de alteração onde a data de
-	fundação e o faturamento sejam maiores ou iguais aos enviados por parâmetro*/
-	int a, b, auxDiaalt, auxMesalt, auxAnoalt, auxDiafund, auxMesfund, auxAnofund, c, d, e, f, g, dia, mes, ano, fat;
+void ordenarData(int tam, int a, int b) {
+	int auxDiaalt, auxMesalt, auxAnoalt, auxDiafund, auxMesfund, auxAnofund, dia, mes, ano, fat;
+	char copiaNome[20], copiaDoc[20];
+	long long int auxCodigo, auxFat;
+	// Ano Data Alt
+	auxAnoalt = clientes[a].alt.ano;
+	clientes[a].alt.ano = clientes[b].alt.ano;
+	clientes[b].alt.ano = auxAnoalt;
+	// Faturamento
+	auxFat = clientes[a].fat;
+	clientes[a].fat = clientes[b].fat;
+	clientes[b].fat = auxFat;
+	// Código
+	auxCodigo = clientes[a].codigo;
+	clientes[a].codigo = clientes[b].codigo;
+	clientes[b].codigo = auxCodigo;
+	// Nome
+	strcpy (copiaNome, clientes[a].nome);
+	strcpy(clientes[a].nome, clientes[b].nome);
+	strcpy(clientes[b].nome, copiaNome);
+	// Documento
+	strcpy (copiaDoc, clientes[a].doc);
+	strcpy(clientes[a].doc, clientes[b].doc);
+	strcpy(clientes[b].doc, copiaDoc);
+	// Dia Data Alt
+	auxDiaalt = clientes[a].alt.dia;
+	clientes[a].alt.dia = clientes[b].alt.dia;
+	clientes[b].alt.dia = auxDiaalt;
+	// Mes Data Alt
+	auxMesalt = clientes[a].alt.mes;
+	clientes[a].alt.mes = clientes[b].alt.mes;
+	clientes[b].alt.mes = auxMesalt;
+	// Ano Data Fund
+	auxAnofund = clientes[a].fund.ano;
+	clientes[a].fund.ano = clientes[b].fund.ano;
+	clientes[b].fund.ano = auxAnofund;
+	// Mes Data Fund
+	auxMesfund = clientes[a].fund.mes;
+	clientes[a].fund.mes = clientes[b].fund.mes;
+	clientes[b].fund.mes = auxMesfund;
+	// Dia Data Fund
+	auxDiafund = clientes[a].fund.dia;
+	clientes[a].fund.dia = clientes[b].fund.dia;
+	clientes[b].fund.dia = auxDiafund;
+}
+
+void ordemTam(int tam) {
+	/*Crie uma função que receba uma lista de clientes e retorne os 10 maiores
+	faturamentos.*/
+	system("cls");
+	int a, b, auxDiaalt, auxMesalt, auxAnoalt, auxDiafund, auxMesfund, auxAnofund;
+	char copiaNome[20], copiaDoc[20];
+	long long int auxCodigo, auxFat;
+	for (a=0;a<(tam-1);a++) {
+		for(b=a+1;b<tam;b++) {
+			if (clientes[a].fat<clientes[b].fat) {
+				ordenarData(tam, a, b);
+			}
+		}
+	}
+	for(a=0;a<10;a++) {
+		if (tam==a) {
+			break;
+		}
+		mostrarDados(tam, a);
+	}
+	printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
+	system("pause");
+	reprocessar();
+}
+
+void naoEncontrado(int dia, int mes, int ano, int fat, int tam) {
+	system("cls");
+	if (dia<10 && mes<10) {
+		printf("Não encontramos nenhum cliente a partir da data 0%d/0%d/%d e com piso de faturamento a partir de %d\n", dia, mes, ano, fat);
+	}
+	else if (dia<10) {
+		printf("Não encontramos nenhum cliente a partir da data 0%d/%d/%d e com piso de faturamento a partir de %d\n", dia, mes, ano, fat);
+	}
+	else if (mes<10) {
+		printf("Não encontramos nenhum cliente a partir da data 0%d/0%d/%d e com piso de faturamento a partir de %d\n", dia, mes, ano, fat);
+	}
+	else {
+		printf("Não encontramos nenhum cliente a partir da data %d/%d/%d e com piso de faturamento a partir de %d\n", dia, mes, ano, fat);
+	}
+	system("pause");
+	reprocessar(tam);
+}
+
+void a(int tam) {
+	int a, b, auxDiaalt, auxMesalt, auxAnoalt, auxDiafund, auxMesfund, auxAnofund, c, d, e, dia, mes, ano, fat;
 	char copiaNome[20], copiaDoc[20];
 	long long int auxCodigo, auxFat;
 	do {
@@ -112,269 +197,91 @@ void a(tam) {
 		for (d=0;d<tam;d++) {
 			for (a=0;a<(tam-1);a++) {
 				for (b=a+1;b<tam;b++) {
-					if (clientes[a].alt.ano<clientes[b].alt.ano) {
-						// Ano Data Alt
-						auxAnoalt = clientes[a].alt.ano;
-						clientes[a].alt.ano = clientes[b].alt.ano;
-						clientes[b].alt.ano = auxAnoalt;
-						// Faturamento
-						auxFat = clientes[a].fat;
-						clientes[a].fat = clientes[b].fat;
-						clientes[b].fat = auxFat;
-						// Código
-						auxCodigo = clientes[a].codigo;
-						clientes[a].codigo = clientes[b].codigo;
-						clientes[b].codigo = auxCodigo;
-						// Nome
-						strcpy (copiaNome, clientes[a].nome);
-		        		strcpy(clientes[a].nome, clientes[b].nome);
-		        		strcpy(clientes[b].nome, copiaNome);
-		        		// Documento
-		        		strcpy (copiaDoc, clientes[a].doc);
-		        		strcpy(clientes[a].doc, clientes[b].doc);
-		        		strcpy(clientes[b].doc, copiaDoc);
-		        		// Dia Data Alt
-		        		auxDiaalt = clientes[a].alt.dia;
-						clientes[a].alt.dia = clientes[b].alt.dia;
-						clientes[b].alt.dia = auxDiaalt;
-						// Mes Data Alt
-						auxMesalt = clientes[a].alt.mes;
-						clientes[a].alt.mes = clientes[b].alt.mes;
-						clientes[b].alt.mes = auxMesalt;
-						// Ano Data Fund
-						auxAnofund = clientes[a].fund.ano;
-						clientes[a].fund.ano = clientes[b].fund.ano;
-						clientes[b].fund.ano = auxAnofund;
-						// Mes Data Fund
-						auxMesfund = clientes[a].fund.mes;
-						clientes[a].fund.mes = clientes[b].fund.mes;
-						clientes[b].fund.mes = auxMesfund;
-						// Dia Data Fund
-						auxDiafund = clientes[a].fund.dia;
-						clientes[a].fund.dia = clientes[b].fund.dia;
-						clientes[b].fund.dia = auxDiafund;
+					if (clientes[a].fund.ano<clientes[b].fund.ano) {
+						ordenarData(tam, a, b);
 					}
 				}
 			}
 			for(a=0;a<(tam-1);a++) {
 				for(b=a+1;b<tam;b++) {
-					if(clientes[a].alt.ano==clientes[b].alt.ano) {
-						if (clientes[a].alt.mes<clientes[b].alt.mes) {
-						// Mes Data Alt
-						auxMesalt = clientes[a].alt.mes;
-						clientes[a].alt.mes = clientes[b].alt.mes;
-						clientes[b].alt.mes = auxMesalt;
-						// Ano Data Alt
-						auxAnoalt = clientes[a].alt.ano;
-						clientes[a].alt.ano = clientes[b].alt.ano;
-						clientes[b].alt.ano = auxAnoalt;
-						// Faturamento
-						auxFat = clientes[a].fat;
-						clientes[a].fat = clientes[b].fat;
-						clientes[b].fat = auxFat;
-						// Código
-						auxCodigo = clientes[a].codigo;
-						clientes[a].codigo = clientes[b].codigo;
-						clientes[b].codigo = auxCodigo;
-						// Nome
-						strcpy (copiaNome, clientes[a].nome);
-		        		strcpy(clientes[a].nome, clientes[b].nome);
-		        		strcpy(clientes[b].nome, copiaNome);
-		        		// Documento
-		        		strcpy (copiaDoc, clientes[a].doc);
-		        		strcpy(clientes[a].doc, clientes[b].doc);
-		        		strcpy(clientes[b].doc, copiaDoc);
-		        		// Dia Data Alt
-		        		auxDiaalt = clientes[a].alt.dia;
-						clientes[a].alt.dia = clientes[b].alt.dia;
-						clientes[b].alt.dia = auxDiaalt;
-						// Ano Data Fund
-						auxAnofund = clientes[a].fund.ano;
-						clientes[a].fund.ano = clientes[b].fund.ano;
-						clientes[b].fund.ano = auxAnofund;
-						// Mes Data Fund
-						auxMesfund = clientes[a].fund.mes;
-						clientes[a].fund.mes = clientes[b].fund.mes;
-						clientes[b].fund.mes = auxMesfund;
-						// Dia Data Fund
-						auxDiafund = clientes[a].fund.dia;
-						clientes[a].fund.dia = clientes[b].fund.dia;
-						clientes[b].fund.dia = auxDiafund;
+					if(clientes[a].fund.ano==clientes[b].fund.ano) {
+						if (clientes[a].fund.mes<clientes[b].fund.mes) {
+						ordenarData(tam, a, b);
 						}
 					}
 				}
 			}
 			for(a=0;a<(tam-1);a++) {
 				for(b=a+1;b<tam;b++) {
-					if(clientes[a].alt.mes==clientes[b].alt.mes) {
-						if (clientes[a].alt.dia<clientes[b].alt.dia) {
-		        		// Dia Data Alt
-		        		auxDiaalt = clientes[a].alt.dia;
-						clientes[a].alt.dia = clientes[b].alt.dia;
-						clientes[b].alt.dia = auxDiaalt;
-						// Mes Data Alt
-						auxMesalt = clientes[a].alt.mes;
-						clientes[a].alt.mes = clientes[b].alt.mes;
-						clientes[b].alt.mes = auxMesalt;
-						// Ano Data Alt
-						auxAnoalt = clientes[a].alt.ano;
-						clientes[a].alt.ano = clientes[b].alt.ano;
-						clientes[b].alt.ano = auxAnoalt;
-						// Faturamento
-						auxFat = clientes[a].fat;
-						clientes[a].fat = clientes[b].fat;
-						clientes[b].fat = auxFat;
-						// Código
-						auxCodigo = clientes[a].codigo;
-						clientes[a].codigo = clientes[b].codigo;
-						clientes[b].codigo = auxCodigo;
-						// Nome
-						strcpy (copiaNome, clientes[a].nome);
-		        		strcpy(clientes[a].nome, clientes[b].nome);
-		        		strcpy(clientes[b].nome, copiaNome);
-		        		// Documento
-		        		strcpy (copiaDoc, clientes[a].doc);
-		        		strcpy(clientes[a].doc, clientes[b].doc);
-		        		strcpy(clientes[b].doc, copiaDoc);
-						// Ano Data Fund
-						auxAnofund = clientes[a].fund.ano;
-						clientes[a].fund.ano = clientes[b].fund.ano;
-						clientes[b].fund.ano = auxAnofund;
-						// Mes Data Fund
-						auxMesfund = clientes[a].fund.mes;
-						clientes[a].fund.mes = clientes[b].fund.mes;
-						clientes[b].fund.mes = auxMesfund;
-						// Dia Data Fund
-						auxDiafund = clientes[a].fund.dia;
-						clientes[a].fund.dia = clientes[b].fund.dia;
-						clientes[b].fund.dia = auxDiafund;
+					if(clientes[a].fund.mes==clientes[b].fund.mes) {
+						if (clientes[a].fund.dia<clientes[b].fund.dia) {
+		        		ordenarData(tam, a, b);
 						}
 					}
 				}
 			}
 		}
 	}
-	
+	system("cls");
 	for(a=0;a<tam;a++) {
-		if(clientes[a].alt.ano<ano) {
+		if(clientes[a].fund.ano<ano) {
 			
 		}
-		else if(clientes[a].alt.ano==ano) {
-			if (clientes[a].alt.mes<mes) {
+		else if(clientes[a].fund.ano==ano) {
+			if (clientes[a].fund.mes<mes) {
 				
 			}
-			else if(clientes[a].alt.mes==mes) {
-				if (clientes[a].alt.dia<dia) {
+			else if(clientes[a].fund.mes==mes) {
+				if (clientes[a].fund.dia<dia) {
 					
 				}
 				else {
 					if (clientes[a].fat>=fat) {
 						mostrarDados(tam, a);
 					}
+					else {
+						naoEncontrado(dia, mes, ano, fat, tam);
+						break;
+					}
 				}
 			}
 			else {
 				if (clientes[a].fat>=fat) {
-						mostrarDados(tam, a);
-					}
+					mostrarDados(tam, a);
+				}
+				else {
+					naoEncontrado(dia, mes, ano, fat, tam);
+					break;
+				}
 			}
 		}
 		else {
 			if (clientes[a].fat>=fat) {
-						mostrarDados(tam, a);
-					}
+				mostrarDados(tam, a);
+			}
+			else {
+				naoEncontrado(dia, mes, ano, fat, tam);
+				break;
+			}
 		}
 	}
 	printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 	system("pause");
+	reprocessar(tam);
 }
 
-void ordemTam(tam) {
-	/*Crie uma função que receba uma lista de clientes e retorne os 10 maiores
-	faturamentos.*/
-	system("cls");
-	int a, b, auxDiaalt, auxMesalt, auxAnoalt, auxDiafund, auxMesfund, auxAnofund;
-	char copiaNome[20], copiaDoc[20];
-	long long int auxCodigo, auxFat;
-	for (a=0;a<(tam-1);a++) {
-		for(b=a+1;b<tam;b++) {
-			if (clientes[a].fat<clientes[b].fat) {
-				// Faturamento
-				auxFat = clientes[a].fat;
-				clientes[a].fat = clientes[b].fat;
-				clientes[b].fat = auxFat;
-				// Código
-				auxCodigo = clientes[a].codigo;
-				clientes[a].codigo = clientes[b].codigo;
-				clientes[b].codigo = auxCodigo;
-				// Nome
-				strcpy (copiaNome, clientes[a].nome);
-        		strcpy(clientes[a].nome, clientes[b].nome);
-        		strcpy(clientes[b].nome, copiaNome);
-        		// Documento
-        		strcpy (copiaDoc, clientes[a].doc);
-        		strcpy(clientes[a].doc, clientes[b].doc);
-        		strcpy(clientes[b].doc, copiaDoc);
-        		// Dia Data Alt
-        		auxDiaalt = clientes[a].alt.dia;
-				clientes[a].alt.dia = clientes[b].alt.dia;
-				clientes[b].alt.dia = auxDiaalt;
-				// Mes Data Alt
-				auxMesalt = clientes[a].alt.mes;
-				clientes[a].alt.mes = clientes[b].alt.mes;
-				clientes[b].alt.mes = auxMesalt;
-				// Ano Data Alt
-				auxAnoalt = clientes[a].alt.ano;
-				clientes[a].alt.ano = clientes[b].alt.ano;
-				clientes[b].alt.ano = auxAnoalt;
-				// Ano Data Fund
-				auxAnofund = clientes[a].fund.ano;
-				clientes[a].fund.ano = clientes[b].fund.ano;
-				clientes[b].fund.ano = auxAnofund;
-				// Mes Data Fund
-				auxMesfund = clientes[a].fund.mes;
-				clientes[a].fund.mes = clientes[b].fund.mes;
-				clientes[b].fund.mes = auxMesfund;
-				// Dia Data Fund
-				auxDiafund = clientes[a].fund.dia;
-				clientes[a].fund.dia = clientes[b].fund.dia;
-				clientes[b].fund.dia = auxDiafund;
-			}
-		}
+void menuRep(int tam) {
+	int op;
+	do {
+		printf("Você deseja:\n1-Inserir a data de fundação e o valor do faturamento e retorná-los em ordem de data de faturamento\n2-Retornar os 10 maiores faturamentos entre clientes\nSua opção: ");
+		scanf("%d", &op);
+	} while (op<1 || op>2);
+	if (op==1) {
+		a(tam);
 	}
-	for(a=0;a<10;a++) {
-		if (tam==a) {
-			break;
-		}
-		printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
-		printf("Nome do cliente: %s", clientes[a].nome); printf("	"); printf ("Código de %s: %d\n", clientes[a].nome, clientes[a].codigo);
-		printf("Faturamento de %s: R$%d", clientes[a].nome, clientes[a].fat); printf("	"); printf ("Documento de %s: %s\n", clientes[a].nome, clientes[a].doc);
-		if (clientes[a].fund.dia < 10) {
-			printf("Data de fundação de %s: 0%d/%d/%d	", clientes[a].nome, clientes[a].fund.dia, clientes[a].fund.mes, clientes[a].fund.ano);
-		}
-		else if (clientes[a].fund.mes < 10) {
-			printf("Data de fundação de %s: %d/0%d/%d	", clientes[a].nome, clientes[a].fund.dia, clientes[a].fund.mes, clientes[a].fund.ano);
-		}
-		else if (clientes[a].fund.mes < 10 && clientes[a].fund.dia < 10) {
-			printf("Data de fundação de %s: 0%d/0%d/%d	", clientes[a].nome, clientes[a].fund.dia, clientes[a].fund.mes, clientes[a].fund.ano);
-		}
-		else {
-			printf("Data de fundação de %s: %d/%d/%d	", clientes[a].nome, clientes[a].fund.dia, clientes[a].fund.mes, clientes[a].fund.ano);
-		}
-		if (clientes[a].alt.dia < 10) {
-			printf("Data de alteração de %s: 0%d/%d/%d\n", clientes[a].nome, clientes[a].alt.dia, clientes[a].alt.mes, clientes[a].alt.ano);
-		}
-		else if (clientes[a].alt.mes < 10) {
-			printf("Data de alteração de %s: %d/0%d/%d\n", clientes[a].nome, clientes[a].alt.dia, clientes[a].alt.mes, clientes[a].alt.ano);
-		}
-		else if (clientes[a].alt.mes < 10 && clientes[a].alt.dia < 10) {
-			printf("Data de alteração de %s: 0%d/0%d/%d\n", clientes[a].nome, clientes[a].alt.dia, clientes[a].alt.mes, clientes[a].alt.ano);
-		}
-		else {
-			printf("Data de alteração de %s: %d/%d/%d\n", clientes[a].nome, clientes[a].alt.dia, clientes[a].alt.mes, clientes[a].alt.ano);
-		}
+	if (op==2) {
+		ordemTam(tam);
 	}
-	printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 }
 
 void menu() {
@@ -390,7 +297,7 @@ void menu() {
 	leDados(tam);
 	system("cls");
 	do {
-		printf("Você deseja:\n1-Inserir a data de fundação e o valor do faturamento e retorná-los em ordem\n2-Retornar os 10 maiores faturamentos entre clientes\nSua opção: ");
+		printf("Você deseja:\n1-Inserir a data de fundação e o valor do faturamento e retorná-los em ordem de data de faturamento\n2-Retornar os 10 maiores faturamentos entre clientes\nSua opção: ");
 		scanf("%d", &op);
 	} while (op<1 || op>2);
 	if (op==1) {
@@ -398,6 +305,24 @@ void menu() {
 	}
 	if (op==2) {
 		ordemTam(tam);
+	}
+}
+
+void reprocessar(int tam) {
+	int op;
+	system("cls");
+	do {
+		printf("Você deseja reutilizar o programa com os dados inseridos ou deseja inserir outros?\n1-Reutilizar com os mesmos dados\n2-Reutilizar com novos dados\n3-Sair\nSua opção: ");
+		scanf("%d", &op);
+	} while(op<0&&op>3);
+	if (op==1) {
+		menuRep(tam);
+	}
+	if (op==2) {
+		main();
+	}
+	else {
+		system("exit");
 	}
 }
 
