@@ -22,7 +22,9 @@ struct clientesEmp {
 
 /*Crie uma função que receba a data de fundação e o valor do faturamento,
 retorne todos os clientes ativos ordenados por data de alteração onde a data de
-fundação e o faturamento sejam maiores ou iguais aos enviados por parâmetro. */
+fundação e o faturamento sejam maiores ou iguais aos enviados por parâmetro.
+Crie uma função que receba uma lista de clientes e retorne os 10 maiores
+faturamentos.*/
 
 void leDados(tam) {
 	printf("%d\n", tam);
@@ -57,6 +59,7 @@ void leDados(tam) {
 		printf("Insira o valor do faturamento de %s, apenas números\n", clientes[a].nome);
 		fflush(stdin);
 		scanf ("%d", &clientes[a].fat);
+		getchar();
 		fflush(stdout);
 		clientes[a].ativo = true;
 	}
