@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <locale.h>
-
 #define MAX 50
 /*Crie uma função que receba a data de fundação e o valor do faturamento,
 retorne todos os clientes ativos ordenados por data de alteração onde a data de
@@ -142,8 +141,6 @@ void ordenarData(int tam, int a, int b) {
 }
 
 void ordemTam(int tam) {
-	/*Crie uma função que receba uma lista de clientes e retorne os 10 maiores
-	faturamentos.*/
 	system("cls");
 	int a, b;
 	for (a=0;a<(tam-1);a++) {
@@ -161,22 +158,6 @@ void ordemTam(int tam) {
 	}
 	printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 	system("pause");
-}
-
-void naoEncontrado(int dia, int mes, int ano, int fat, int tam) {
-	system("cls");
-	if (dia<10 && mes<10) {
-		printf("Não encontramos nenhum cliente a partir da data 0%d/0%d/%d e com piso de faturamento a partir de %d\n", dia, mes, ano, fat);
-	}
-	else if (dia<10) {
-		printf("Não encontramos nenhum cliente a partir da data 0%d/%d/%d e com piso de faturamento a partir de %d\n", dia, mes, ano, fat);
-	}
-	else if (mes<10) {
-		printf("Não encontramos nenhum cliente a partir da data 0%d/0%d/%d e com piso de faturamento a partir de %d\n", dia, mes, ano, fat);
-	}
-	else {
-		printf("Não encontramos nenhum cliente a partir da data %d/%d/%d e com piso de faturamento a partir de %d\n", dia, mes, ano, fat);
-	}
 }
 
 void a(int tam) {
