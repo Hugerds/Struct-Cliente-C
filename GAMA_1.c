@@ -177,7 +177,7 @@ void naoEncontrado(int dia, int mes, int ano, int fat, int tam) {
 	}
 }
 
-void a(int tam) {
+void ordenaMostraPiso(int tam) {
 	int a, b, dia, mes, ano, fat;
 	system("cls");
 	do {
@@ -187,15 +187,15 @@ void a(int tam) {
 	printf("Agora insira o piso de faturamento que deseja buscar\n"); scanf ("%d", &fat);
 	for (a=0;a<(tam-1);a++) {
 		for (b=a+1;b<tam;b++) {
-			if(clientes[a].fund.ano<clientes[b].fund.ano) {
+			if(clientes[a].alt.ano<clientes[b].alt.ano) {
 				ordenarData(tam, a, b);
 			}
-			else if(clientes[a].fund.ano==clientes[b].fund.ano) {
-				if(clientes[a].fund.mes<clientes[b].fund.mes) {
+			else if(clientes[a].alt.ano==clientes[b].alt.ano) {
+				if(clientes[a].alt.mes<clientes[b].alt.mes) {
 					ordenarData(tam, a, b);
 				}
-				else if(clientes[a].fund.mes==clientes[b].fund.mes) {
-					if(clientes[a].fund.dia<clientes[b].fund.dia) {
+				else if(clientes[a].alt.mes==clientes[b].alt.mes) {
+					if(clientes[a].alt.dia<clientes[b].alt.dia) {
 						ordenarData(tam, a, b);
 					}
 				}
@@ -210,19 +210,14 @@ void a(int tam) {
 				if(clientes[a].fund.dia>=dia && clientes[a].fat>=fat) {
 					mostrarDados(tam, a);
 				}
-				else if(clientes[a].fund.dia<dia || clientes[a].fat<fat){
+				else {
 					nc++;
 				}
 			}
-			else if(clientes[a].fund.mes>mes) {
-				if(clientes[a].fat>=fat) {
-					mostrarDados(tam, a);
-				}
-				else if(clientes[a].fund.dia<dia || clientes[a].fat<fat) {
-					nc++;
-				}
+			else if(clientes[a].fund.mes>mes && clientes[a].fat>=fat) {
+				mostrarDados(tam, a);
 			}
-			else if(clientes[a].fund.mes<mes || clientes[a].fat<fat) {
+			else {
 				nc++;
 			}
 		}
@@ -231,27 +226,20 @@ void a(int tam) {
 				if(clientes[a].fund.dia>=dia && clientes[a].fat>=fat) {
 					mostrarDados(tam, a);
 				}
-				else if(clientes[a].fund.dia<dia || clientes[a].fat<fat) {
+				else {
 					nc++;
 				}
 			}
-			else if(clientes[a].fund.mes>mes) {
-				if(clientes[a].fat>=fat) {
-					mostrarDados(tam, a);
-				}
+			else if(clientes[a].fund.mes>mes && clientes[a].fat>=fat) {
+				mostrarDados(tam, a);
 			}
-			else if(clientes[a].fund.mes<mes || clientes[a].fat<fat) {
+			else {
 				nc++;
 			}
 		}
-		else if(clientes[a].fund.ano<ano) {
-			nc++;
-			printf("%s deu erro\n", clientes[a].nome);
-		}
 	}
 	if (nc!=0) {
-		printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
-		printf("Não encontrado\n");
+		naoEncontrado(dia, mes, ano, fat, tam);
 	}
 	printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 	system("pause");
@@ -265,7 +253,7 @@ void menuRep(int tam) {
 		scanf("%d", &op);
 	} while (op<1 || op>2);
 	if (op==1) {
-		a(tam);
+		ordenaMostraPiso(tam);
 		system("cls");
 		do {
 		printf("Você deseja reutilizar o programa com os dados inseridos ou deseja inserir outros?\n1-Reutilizar com os mesmos dados\n2-Reutilizar com novos dados\n3-Sair\nSua opção: ");
@@ -317,7 +305,7 @@ void menu() {
 		scanf("%d", &op);
 	} while (op<1 || op>2);
 	if (op==1) {
-		a(tam);
+		ordenaMostraPiso(tam);
 		system("cls");
 		do {
 		printf("Você deseja reutilizar o programa com os dados inseridos ou deseja inserir outros?\n1-Reutilizar com os mesmos dados\n2-Reutilizar com novos dados\n3-Sair\nSua opção: ");
