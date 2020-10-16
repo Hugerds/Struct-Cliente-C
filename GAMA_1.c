@@ -160,13 +160,30 @@ void ordemTam(int tam) {
 	system("pause");
 }
 
+void naoEncontrado(int dia, int mes, int ano, int fat, int tam) {
+	system("cls");
+	printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
+	if (dia<10 && mes<10) {
+		printf("Não encontramos nenhum cliente a partir da data 0%d/0%d/%d e com piso de faturamento a partir de R$%d\n", dia, mes, ano, fat);
+	}
+	else if (dia<10) {
+		printf("Não encontramos nenhum cliente a partir da data 0%d/%d/%d e com piso de faturamento a partir de R$%d\n", dia, mes, ano, fat);
+	}
+	else if (mes<10) {
+		printf("Não encontramos nenhum cliente a partir da data 0%d/0%d/%d e com piso de faturamento a partir de R$%d\n", dia, mes, ano, fat);
+	}
+	else {
+		printf("Não encontramos nenhum cliente a partir da data %d/%d/%d e com piso de faturamento a partir de R$%d\n", dia, mes, ano, fat);
+	}
+}
+
 void a(int tam) {
 	int a, b, dia, mes, ano, fat;
 	system("cls");
 	do {
 		printf("Insira a data de fundação que deseja procurar no formato DD MM AAAA\n");
 		scanf ("%d %d %d", &dia, &mes, &ano);
-	} while ((dia <=0 || dia>31) || (mes <= 0 || mes > 12) || (ano < 1950 || ano >2020));
+	} while ((dia <=0 || dia>31) || (mes <= 0 || mes > 12) || (ano < 1950 || ano >2021));
 	printf("Agora insira o piso de faturamento que deseja buscar\n"); scanf ("%d", &fat);
 	for (a=0;a<(tam-1);a++) {
 		for (b=a+1;b<tam;b++) {
@@ -186,20 +203,55 @@ void a(int tam) {
 		}
 	}
 	system("cls");
+	int nc=0;
 	for(a=0;a<tam;a++) {
-		if(clientes[a].fund.ano>=ano) {
-			mostrarDados(tam, a);
-		}
-		else if(clientes[a].fund.ano==ano) {
-			if(clientes[a].fund.mes>=mes) {
-				mostrarDados(tam, a);
+		if(clientes[a].fund.ano==ano) {
+			if(clientes[a].fund.mes==mes) {
+				if(clientes[a].fund.dia>=dia && clientes[a].fat>=fat) {
+					mostrarDados(tam, a);
+				}
+				else if(clientes[a].fund.dia<dia || clientes[a].fat<fat){
+					nc++;
+				}
 			}
-			else if(clientes[a].fund.mes==mes) {
-				if(clientes[a].fund.dia>=dia) {
+			else if(clientes[a].fund.mes>mes) {
+				if(clientes[a].fat>=fat) {
+					mostrarDados(tam, a);
+				}
+				else if(clientes[a].fund.dia<dia || clientes[a].fat<fat) {
+					nc++;
+				}
+			}
+			else if(clientes[a].fund.mes<mes || clientes[a].fat<fat) {
+				nc++;
+			}
+		}
+		else if(clientes[a].fund.ano>ano) {
+			if(clientes[a].fund.mes==mes) {
+				if(clientes[a].fund.dia>=dia && clientes[a].fat>=fat) {
+					mostrarDados(tam, a);
+				}
+				else if(clientes[a].fund.dia<dia || clientes[a].fat<fat) {
+					nc++;
+				}
+			}
+			else if(clientes[a].fund.mes>mes) {
+				if(clientes[a].fat>=fat) {
 					mostrarDados(tam, a);
 				}
 			}
+			else if(clientes[a].fund.mes<mes || clientes[a].fat<fat) {
+				nc++;
+			}
 		}
+		else if(clientes[a].fund.ano<ano) {
+			nc++;
+			printf("%s deu erro\n", clientes[a].nome);
+		}
+	}
+	if (nc!=0) {
+		printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
+		printf("Não encontrado\n");
 	}
 	printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 	system("pause");
