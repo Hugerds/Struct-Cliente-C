@@ -19,17 +19,16 @@ struct clientesEmp {
 	char codigo[20];
 	char nome[20];
 	char doc[20];
-	int fat;
+	long int fat;
 	data fund, alt;
 	bool ativo;
 } clientes[MAX];
 
 void leDados(int tam) {
-	printf("%d\n", tam);
 	int a;
 	for (a=0;a<tam;a++) {
 		printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
-		printf("Insira o nome do cliente\n");
+		printf("Insira o nome do cliente %d\n", a+1);
 		fflush(stdin);
 		gets(clientes[a].nome);
 		printf ("Insira o código de cliente de %s\n", clientes[a].nome);
@@ -41,22 +40,22 @@ void leDados(int tam) {
 		gets(clientes[a].doc);
 		fflush(stdout);
 		do {
-			printf("Insira a data de fundação de %s(No formato DD MM AAAA)\n", clientes[a].nome);
+			printf("Insira a data de fundação de %s no formato DD MM AAAA (1950-2020)\n", clientes[a].nome);
 			fflush(stdin);
 			scanf("%d %d %d", &clientes[a].fund.dia, &clientes[a].fund.mes, &clientes[a].fund.ano);
 			fflush(stdout);
 			getchar();
 		} while ((clientes[a].fund.dia <=0 || clientes[a].fund.dia>31) || (clientes[a].fund.mes <= 0 || clientes[a].fund.mes > 12) || (clientes[a].fund.ano < 1950 || clientes[a].fund.ano >2020));
 		do {
-			printf("Insira a data de alteração de %s(No formato DD MM AAAA)\n", clientes[a].nome);
+			printf("Insira a data de alteração de %s no formato DD MM AAAA (1950-2020)\n", clientes[a].nome);
 			fflush(stdin);
 			scanf("%d %d %d", &clientes[a].alt.dia, &clientes[a].alt.mes, &clientes[a].alt.ano);
 			fflush(stdout);
 			getchar();
-		} while ((clientes[a].alt.dia <=0 || clientes[a].alt.dia>31) || (clientes[a].alt.mes <= 0 || clientes[a].alt.mes > 12) || (clientes[a].alt.ano < 1950 || clientes[a].alt.ano >2020));
+		} while ((clientes[a].alt.dia <=0 || clientes[a].alt.dia>31) || (clientes[a].alt.mes <= 0 || clientes[a].alt.mes > 12) || (clientes[a].alt.ano < 1950 || clientes[a].alt.ano >2020) && clientes[a].alt.ano>=clientes[a].fund.ano);
 		printf("Insira o valor do faturamento de %s, apenas números\n", clientes[a].nome);
 		fflush(stdin);
-		scanf ("%d", &clientes[a].fat);
+		scanf ("%ld", &clientes[a].fat);
 		getchar();
 		fflush(stdout);
 		clientes[a].ativo = true;
@@ -160,31 +159,15 @@ void ordemTam(int tam) {
 	system("pause");
 }
 
-void naoEncontrado(int dia, int mes, int ano, int fat, int tam) {
-	system("cls");
-	printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
-	if (dia<10 && mes<10) {
-		printf("Não encontramos nenhum cliente a partir da data 0%d/0%d/%d e com piso de faturamento a partir de R$%d\n", dia, mes, ano, fat);
-	}
-	else if (dia<10) {
-		printf("Não encontramos nenhum cliente a partir da data 0%d/%d/%d e com piso de faturamento a partir de R$%d\n", dia, mes, ano, fat);
-	}
-	else if (mes<10) {
-		printf("Não encontramos nenhum cliente a partir da data 0%d/0%d/%d e com piso de faturamento a partir de R$%d\n", dia, mes, ano, fat);
-	}
-	else {
-		printf("Não encontramos nenhum cliente a partir da data %d/%d/%d e com piso de faturamento a partir de R$%d\n", dia, mes, ano, fat);
-	}
-}
-
 void ordenaMostraPiso(int tam) {
-	int a, b, dia, mes, ano, fat;
+	int a, b, dia, mes, ano; 
+	long int fat;
 	system("cls");
 	do {
-		printf("Insira a data de fundação que deseja procurar no formato DD MM AAAA\n");
+		printf("Insira a data de fundação que deseja procurar no formato DD MM AAAA (1950-2020)\n");
 		scanf ("%d %d %d", &dia, &mes, &ano);
-	} while ((dia <=0 || dia>31) || (mes <= 0 || mes > 12) || (ano < 1950 || ano >2021));
-	printf("Agora insira o piso de faturamento que deseja buscar\n"); scanf ("%d", &fat);
+	} while ((dia <=0 || dia>31) || (mes <= 0 || mes > 12) || (ano < 1950 || ano >2020));
+	printf("Agora insira o piso de faturamento que deseja buscar\n"); scanf ("%ld", &fat);
 	for (a=0;a<(tam-1);a++) {
 		for (b=a+1;b<tam;b++) {
 			if(clientes[a].alt.ano<clientes[b].alt.ano) {
@@ -203,43 +186,29 @@ void ordenaMostraPiso(int tam) {
 		}
 	}
 	system("cls");
-	int nc=0;
 	for(a=0;a<tam;a++) {
-		if(clientes[a].fund.ano==ano) {
+		if(clientes[a].fund.ano>ano && clientes[a].fat>=fat) {
+			mostrarDados(tam, a);
+		}
+		else if(clientes[a].fund.ano==ano) {
 			if(clientes[a].fund.mes==mes) {
 				if(clientes[a].fund.dia>=dia && clientes[a].fat>=fat) {
 					mostrarDados(tam, a);
 				}
 				else {
-					nc++;
+					
 				}
 			}
 			else if(clientes[a].fund.mes>mes && clientes[a].fat>=fat) {
 				mostrarDados(tam, a);
 			}
-			else {
-				nc++;
+			else if(clientes[a].fund.mes<mes) {
+				
 			}
 		}
-		else if(clientes[a].fund.ano>ano) {
-			if(clientes[a].fund.mes==mes) {
-				if(clientes[a].fund.dia>=dia && clientes[a].fat>=fat) {
-					mostrarDados(tam, a);
-				}
-				else {
-					nc++;
-				}
-			}
-			else if(clientes[a].fund.mes>mes && clientes[a].fat>=fat) {
-				mostrarDados(tam, a);
-			}
-			else {
-				nc++;
-			}
+		else if(clientes[a].fund.ano<ano) {
+			
 		}
-	}
-	if (nc!=0) {
-		naoEncontrado(dia, mes, ano, fat, tam);
 	}
 	printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 	system("pause");
@@ -249,7 +218,7 @@ void menuRep(int tam) {
 	int op, opRep;
 	system("cls");
 	do {
-		printf("Você deseja:\n1-Inserir a data de fundação e o valor do faturamento e retorná-los em ordem de data de faturamento\n2-Retornar os 10 maiores faturamentos entre clientes\nSua opção: ");
+		printf("Você deseja:\n1-Inserir a data de fundação e o valor do faturamento e retorná-los em ordem de data de alteração\n2-Retornar os 10 maiores faturamentos entre clientes\nSua opção: ");
 		scanf("%d", &op);
 	} while (op<1 || op>2);
 	if (op==1) {
@@ -266,6 +235,8 @@ void menuRep(int tam) {
 			main();
 		}
 		else {
+			system("cls");
+			printf("Obrigado por utilizar o programa!\nDesenvolvido por Hugo Esteves\n");
 			system("exit");
 		}
 	}
@@ -290,6 +261,7 @@ void menuRep(int tam) {
 
 void menu() {
 	int tam, op, opRep;
+	system("cls");
 	do {
 		printf("Quantos clientes você deseja cadastrar?(MAX 50)\n");
 		fflush(stdin);
@@ -301,7 +273,7 @@ void menu() {
 	leDados(tam);
 	system("cls");
 	do {
-		printf("Você deseja:\n1-Inserir a data de fundação e o valor do faturamento e retorná-los em ordem de data de faturamento\n2-Retornar os 10 maiores faturamentos entre clientes\nSua opção: ");
+		printf("Você deseja:\n1-Inserir a data de fundação e o valor do faturamento e retorná-los em ordem de data de alteração\n2-Retornar os 10 maiores faturamentos entre clientes\nSua opção: ");
 		scanf("%d", &op);
 	} while (op<1 || op>2);
 	if (op==1) {
@@ -318,6 +290,8 @@ void menu() {
 			main();
 		}
 		else {
+			system("cls");
+			printf("Obrigado por utilizar o programa!\nDesenvolvido por Hugo Esteves\n");
 			system("exit");
 		}
 	}
