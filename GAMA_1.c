@@ -52,7 +52,7 @@ void leDados(int tam) {
 			scanf("%d %d %d", &clientes[a].alt.dia, &clientes[a].alt.mes, &clientes[a].alt.ano);
 			fflush(stdout);
 			getchar();
-		} while ((clientes[a].alt.dia <=0 || clientes[a].alt.dia>31) || (clientes[a].alt.mes <= 0 || clientes[a].alt.mes > 12) || (clientes[a].alt.ano < 1950 || clientes[a].alt.ano >2020) && clientes[a].alt.ano>=clientes[a].fund.ano);
+		} while ((clientes[a].alt.dia <=0 || clientes[a].alt.dia>31) || (clientes[a].alt.mes <= 0 || clientes[a].alt.mes > 12) || (clientes[a].alt.ano < 1950 || clientes[a].alt.ano >2020));
 		printf("Insira o valor do faturamento de %s, apenas números\n", clientes[a].nome);
 		fflush(stdin);
 		scanf ("%ld", &clientes[a].fat);
