@@ -309,6 +309,8 @@ void menu() {
 			main();
 		}
 		else {
+			system("cls");
+			printf("Obrigado por utilizar o programa!\nDesenvolvido por Hugo Esteves\n");
 			system("exit");
 		}
 	}
